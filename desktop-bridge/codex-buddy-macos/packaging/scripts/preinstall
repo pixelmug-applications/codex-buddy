@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CONSOLE_USER="$(stat -f '%Su' /dev/console || true)"
+if [[ -n "$CONSOLE_USER" && "$CONSOLE_USER" != "root" && "$CONSOLE_USER" != "loginwindow" ]]; then
+  if [[ -x /usr/local/bin/pixelmug-codex ]]; then
+    su -l "$CONSOLE_USER" -c "/usr/local/bin/pixelmug-codex uninstall" || true
+  fi
+fi
+
+exit 0

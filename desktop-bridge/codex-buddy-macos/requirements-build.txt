@@ -1,0 +1,4 @@
+pyinstaller>=6.5
+rumps>=0.4.0
+pyobjc-framework-Cocoa>=10.0
+Pillow>=10.0

@@ -1,0 +1,11 @@
+{
+  "name": "mps-codex-buddy",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "bot": "node bot/index.js"
+  },
+  "dependencies": {
+    "@jeejio-bubble/bot": "0.1.9"
+  }
+}

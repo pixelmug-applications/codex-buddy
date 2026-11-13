@@ -1,0 +1,18 @@
+{
+  "name": "codex-buddy",
+  "version": "1.0.1",
+  "description": "PixelMug Codex UDP pairing and status receiver.",
+  "author": "PixelMug",
+  "category": "Tool",
+  "dependencies": [
+    {
+      "name": "micropyxel",
+      "version": ">=1.0.0"
+    },
+    {
+      "name": "mpy_button",
+      "version": ">=1.0.0"
+    }
+  ],
+  "date": "2026-07-17"
+}

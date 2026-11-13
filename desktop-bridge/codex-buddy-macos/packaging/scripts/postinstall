@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CONSOLE_USER="$(stat -f '%Su' /dev/console || true)"
+if [[ -z "$CONSOLE_USER" || "$CONSOLE_USER" == "root" || "$CONSOLE_USER" == "loginwindow" ]]; then
+  exit 0
+fi
+
+BIN="/usr/local/bin/pixelmug-codex"
+APP="/Applications/PixelMug Codex.app"
+
+# Install user-level Codex hook and LaunchAgent in the active desktop user account.
+su -l "$CONSOLE_USER" -c "'$BIN' install --bin '$BIN' --no-start-now" || true
+su -l "$CONSOLE_USER" -c "open '$APP'" || true
+
+exit 0
