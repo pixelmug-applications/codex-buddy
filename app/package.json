@@ -5,6 +5,11 @@
   "scripts": {
     "bot": "node bot/index.js"
   },
+  "pixelmug": {
+    "deploy": {
+      "exclude": ["debug"]
+    }
+  },
   "dependencies": {
     "@jeejio-bubble/bot": "0.1.9"
   }
