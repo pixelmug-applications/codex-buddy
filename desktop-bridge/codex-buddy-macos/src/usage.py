@@ -284,8 +284,7 @@ def _quota_window(raw: Any, timestamp: datetime | None = None) -> CodexQuotaWind
     used = _number(raw.get("used_percent") if "used_percent" in raw else raw.get("usedPercent"))
     if used is None:
         return None
-    if 0 < used <= 1:
-        used *= 100
+    # Codex reports percentage points, including values at or below 1.
     used = min(max(used, 0), 100)
     seconds = _number(raw.get("limit_window_seconds") if "limit_window_seconds" in raw else raw.get("limitWindowSeconds"))
     minutes = _number(raw.get("window_minutes") if "window_minutes" in raw else raw.get("windowDurationMins"))

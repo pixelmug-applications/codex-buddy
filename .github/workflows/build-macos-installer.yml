@@ -1,0 +1,68 @@
+name: Build macOS Installers
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build macOS installer (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: arm64
+            runner: macos-15
+            binary-arch: arm64
+          - arch: x64
+            runner: macos-15-intel
+            binary-arch: x86_64
+    defaults:
+      run:
+        shell: bash
+        working-directory: desktop-bridge/codex-buddy-macos
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          architecture: ${{ matrix.arch }}
+
+      - name: Build and verify installer
+        env:
+          PACKAGE_ARCH: ${{ matrix.arch }}
+          BINARY_ARCH: ${{ matrix.binary-arch }}
+        run: |
+          bash packaging/build_macos.sh
+
+          for executable in "dist/pixelmug-codex" "dist/PixelMug Codex.app/Contents/MacOS/PixelMug Codex"; do
+            actual_arch="$(lipo -archs "$executable")"
+            if [[ "$actual_arch" != "$BINARY_ARCH" ]]; then
+              echo "Expected $BINARY_ARCH for $executable, got $actual_arch" >&2
+              exit 1
+            fi
+          done
+
+          shopt -s nullglob
+          packages=(release/PixelMugCodex-*.pkg)
+          if [[ "${#packages[@]}" -ne 1 ]]; then
+            echo 'Expected exactly one macOS installer package.' >&2
+            exit 1
+          fi
+          package="${packages[0]}"
+          pkgutil --payload-files "$package"
+          mv "$package" "${package%.pkg}-$PACKAGE_ARCH.pkg"
+
+      - name: Upload macOS installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: codex-buddy-macos-${{ matrix.arch }}-installer
+          path: desktop-bridge/codex-buddy-macos/release/PixelMugCodex-*-${{ matrix.arch }}.pkg
+          if-no-files-found: error

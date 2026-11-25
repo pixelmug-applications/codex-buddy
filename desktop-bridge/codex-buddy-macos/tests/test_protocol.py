@@ -2,7 +2,13 @@ import json
 from datetime import datetime, timezone
 
 from src.protocol import make_auth_check_message, make_status_packet, normalize_hook_payload, truncate_text
-from src.usage import CodexUsageSnapshot, _carry_forward_quota, scan_local_usage
+from src.usage import (
+    CodexUsageSnapshot,
+    _carry_forward_quota,
+    _quota_from_payload,
+    _quota_from_usage_response,
+    scan_local_usage,
+)
 
 
 def test_prompt_is_redacted():
@@ -92,6 +98,26 @@ def test_scan_local_usage_reads_token_count_and_quota(tmp_path):
     assert totals["2026-06-24"] == 20
     assert quota["5h"].remaining_percent == 75
     assert quota["7d"].remaining_percent == 60
+
+
+def test_weekly_only_quota_at_or_below_one_percent():
+    timestamp = datetime.now().astimezone()
+    for used in (0, 0.5, 1, 100):
+        local = _quota_from_payload({
+            "rate_limits": {
+                "primary": {"used_percent": used, "window_minutes": 10080},
+                "secondary": None,
+            },
+        }, timestamp)
+        remote = _quota_from_usage_response({
+            "rateLimits": {
+                "primary": {"usedPercent": used, "windowDurationMins": 10080},
+                "secondary": None,
+            },
+        })
+        for quota in (local, remote):
+            assert set(quota) == {"7d"}
+            assert quota["7d"].remaining_percent == 100 - used
 
 
 def test_usage_refresh_carries_forward_quota():

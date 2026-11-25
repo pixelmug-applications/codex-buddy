@@ -1,6 +1,6 @@
 ﻿[project]
 name = "pixelmug-codex-buddy"
-version = "0.2.0"
+version = "0.2.1"
 description = "Windows buddy bridge and Codex hook for PixelMug Codex status display"
 requires-python = ">=3.10"
 dependencies = [
