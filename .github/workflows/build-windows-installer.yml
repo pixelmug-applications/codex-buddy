@@ -1,0 +1,50 @@
+name: Build Windows Installer
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2025
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: desktop-bridge/codex-buddy-x64
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          architecture: x64
+
+      - name: Build executables and installer
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          $iscc = (Get-Command ISCC.exe -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1).Source
+          if (-not $iscc) {
+            $iscc = @(
+              "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+              "$env:ProgramFiles\Inno Setup 6\ISCC.exe"
+            ) | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Select-Object -First 1
+          }
+          if (-not $iscc) {
+            throw 'ISCC.exe was not found on the Windows runner. Inno Setup 6 is required.'
+          }
+          Write-Host "Using Inno Setup compiler: $iscc"
+          .\scripts\build_exe.ps1 -Python python
+          .\scripts\build_installer.ps1 -Path $iscc
+
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: codex-buddy-windows-x64-installer
+          path: desktop-bridge/codex-buddy-x64/installer_out/PixelMugCodexBuddySetup-*.exe
+          if-no-files-found: error
