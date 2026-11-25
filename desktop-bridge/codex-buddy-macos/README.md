@@ -57,12 +57,12 @@ xcode-select --install   # If Command Line Tools are not installed
 ./packaging/build_macos.sh
 ```
 
-The package is written to `release/PixelMugCodex-0.1.0.pkg`.
+The package is written to `release/PixelMugCodex-<version>.pkg`, using `[project].version` from `pyproject.toml`.
 
 To install it locally:
 
 ```bash
-sudo installer -pkg release/PixelMugCodex-0.1.0.pkg -target /
+sudo installer -pkg "release/PixelMugCodex-<version>.pkg" -target /
 ```
 
 To uninstall the buddy:

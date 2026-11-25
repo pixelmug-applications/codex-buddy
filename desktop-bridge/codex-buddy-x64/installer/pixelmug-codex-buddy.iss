@@ -1,5 +1,8 @@
 #define MyAppName "PixelMug Codex Buddy"
-#define MyAppVersion "0.2.0"
+#define MyAppVersion ReadIni(AddBackslash(SourcePath) + "..\pyproject.toml", "project", "version", "")
+#if MyAppVersion == ""
+#error Missing [project].version in pyproject.toml
+#endif
 #define MyAppPublisher "PixelMug"
 #define MyAppExeName "pixelmug-codex-buddy.exe"
 #define MyAppIcon "..\assets\pixelmug-codex.ico"

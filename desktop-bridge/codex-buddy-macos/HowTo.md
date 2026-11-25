@@ -15,13 +15,13 @@ xcode-select --install   # If Command Line Tools are not installed
 The package is written to:
 
 ```text
-release/PixelMugCodex-0.1.0.pkg
+release/PixelMugCodex-<version>.pkg
 ```
 
 Install it with:
 
 ```bash
-sudo installer -pkg release/PixelMugCodex-0.1.0.pkg -target /
+sudo installer -pkg "release/PixelMugCodex-<version>.pkg" -target /
 ```
 
 The package installs:
@@ -107,10 +107,10 @@ export DEVELOPER_ID_INSTALLER="Developer ID Installer: Your Company (TEAMID)"
 Submit and staple the package with:
 
 ```bash
-xcrun notarytool submit "release/PixelMugCodex-0.1.0.pkg" \
+xcrun notarytool submit "release/PixelMugCodex-<version>.pkg" \
   --keychain-profile "<your-notary-profile>" \
   --wait
 
-xcrun stapler staple "release/PixelMugCodex-0.1.0.pkg"
-spctl -a -vv -t install "release/PixelMugCodex-0.1.0.pkg"
+xcrun stapler staple "release/PixelMugCodex-<version>.pkg"
+spctl -a -vv -t install "release/PixelMugCodex-<version>.pkg"
 ```

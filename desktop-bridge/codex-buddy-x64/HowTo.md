@@ -59,10 +59,12 @@ powershell -ExecutionPolicy Bypass -File .\scripts\build_installer.ps1 -Path "C:
 The installer is written to:
 
 ```text
-installer_out\PixelMugCodexBuddySetup-0.2.0.exe
+installer_out\PixelMugCodexBuddySetup-<version>.exe
 ```
 
 ### Manual build with ISIDE.exe
+
+The installer version comes from `[project].version` in `pyproject.toml`.
 
 If only the Inno Setup IDE is available, pass `ISIDE.exe`:
 
@@ -73,7 +75,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\build_installer.ps1 -Path "C:
 The script opens the installer project in Inno Setup. Click **Build > Compile** in the IDE. The installer is still written to:
 
 ```text
-installer_out\PixelMugCodexBuddySetup-0.2.0.exe
+installer_out\PixelMugCodexBuddySetup-<version>.exe
 ```
 
 ## Installer behavior

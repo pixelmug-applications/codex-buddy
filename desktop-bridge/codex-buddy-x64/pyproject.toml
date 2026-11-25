@@ -1,4 +1,4 @@
-﻿[project]
+[project]
 name = "pixelmug-codex-buddy"
 version = "0.2.1"
 description = "Windows buddy bridge and Codex hook for PixelMug Codex status display"

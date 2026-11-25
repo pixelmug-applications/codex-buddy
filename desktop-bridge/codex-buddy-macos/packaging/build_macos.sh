@@ -2,13 +2,11 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="${VERSION:-0.1.0}"
 PKG_ID="com.pixelmug.codex"
 OUT_DIR="$ROOT_DIR/release"
 PKGROOT="${PKGROOT:-/private/tmp/pixelmug-codex-pkgroot-${UID:-$(id -u)}}"
 COMPONENT_PKG="$ROOT_DIR/build/pixelmug-codex-component.pkg"
 COMPONENT_PLIST="$ROOT_DIR/build/pixelmug-codex-components.plist"
-FINAL_PKG="$OUT_DIR/PixelMugCodex-${VERSION}.pkg"
 
 cd "$ROOT_DIR"
 mkdir -p "$OUT_DIR" "$ROOT_DIR/build"
@@ -20,6 +18,8 @@ source .venv/bin/activate
 python -m pip install --upgrade pip wheel
 python -m pip install -r requirements-build.txt
 python -m pip install -e .
+VERSION="$(python -c 'from importlib.metadata import version; print(version("pixelmug-codex"))')"
+FINAL_PKG="$OUT_DIR/PixelMugCodex-${VERSION}.pkg"
 
 rm -rf dist build/pyinstaller "$PKGROOT" "$COMPONENT_PKG"
 python packaging/make_macos_icon.py
