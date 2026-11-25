@@ -7,7 +7,7 @@
   },
   "pixelmug": {
     "deploy": {
-      "exclude": ["debug"]
+      "exclude": ["debug", "desktop-bridge"]
     }
   },
   "dependencies": {

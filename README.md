@@ -4,7 +4,7 @@ PixelMug Codex Buddy connects Codex on a computer to a PixelMug display. This re
 
 ## Components
 
-- **`app/`** — the PixelMug Studio application. It contains the MicroPython app and the Node.js bot that receives Codex status and renders it on PixelMug.
+- **`bot/` and `mpy/`** contain the PixelMug Studio application. The Bot opens the device app, and the MicroPython app displays Codex status.
 - **`desktop-bridge/codex-buddy-macos/`** — the macOS companion. It provides the Codex hook, menu-bar bridge, pairing flow, and `.pkg` packaging scripts.
 - **`desktop-bridge/codex-buddy-x64/`** — the Windows x64 companion. It provides the Codex hook, system-tray bridge, CLI utilities, executable build, and installer scripts.
 
@@ -12,15 +12,15 @@ Both desktop companions use the same local UDP channels: `39216` for hook events
 
 ## PixelMug app
 
-Open `app/` in PixelMug Studio to test or run the application. The bot uses the current PixelMug Bot SDK and reads its connection settings from environment variables such as `BOT_TOKEN`, `BOT_API_BASE_URL`, `STUDIO_MPS_ID`, and `STUDIO_MPS_VERSION`.
+Open the repository root in PixelMug Studio to test or run the application. The bot uses the current PixelMug Bot SDK and reads its connection settings from environment variables such as `BOT_TOKEN`, `BOT_API_BASE_URL`, `STUDIO_MPS_ID`, and `STUDIO_MPS_VERSION`.
 
-Install the bot dependencies from `app/` with:
+Install the Bot dependencies from the repository root:
 
 ```bash
-npm install
+npm ci
 ```
 
-The project intentionally does not commit `package-lock.json`; PixelMug Studio installs dependencies when it loads the app.
+The Studio Bot deployment package excludes `desktop-bridge/` and local debug output.
 
 ## Desktop development
 
