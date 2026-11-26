@@ -10,7 +10,9 @@ BIN="/usr/local/bin/pixelmug-codex"
 APP="/Applications/PixelMug Codex.app"
 
 # Install user-level Codex hook and LaunchAgent in the active desktop user account.
-su -l "$CONSOLE_USER" -c "'$BIN' install --bin '$BIN' --no-start-now" || true
-su -l "$CONSOLE_USER" -c "open '$APP'" || true
+su -l "$CONSOLE_USER" -c "'$BIN' install --bin '$BIN' --no-start-now" ||
+  printf "%s\n" "PixelMug Codex postinstall: could not register the hook or LaunchAgent." >&2
+su -l "$CONSOLE_USER" -c "open '$APP'" ||
+  printf "%s\n" "PixelMug Codex postinstall: could not open the menu-bar app." >&2
 
 exit 0

@@ -7,6 +7,7 @@ OUT_DIR="$ROOT_DIR/release"
 PKGROOT="${PKGROOT:-/private/tmp/pixelmug-codex-pkgroot-${UID:-$(id -u)}}"
 COMPONENT_PKG="$ROOT_DIR/build/pixelmug-codex-component.pkg"
 COMPONENT_PLIST="$ROOT_DIR/build/pixelmug-codex-components.plist"
+PACKAGE_SCRIPTS="$ROOT_DIR/build/pkg-scripts"
 
 cd "$ROOT_DIR"
 mkdir -p "$OUT_DIR" "$ROOT_DIR/build"
@@ -61,12 +62,16 @@ if [[ -n "${DEVELOPER_ID_APPLICATION:-}" ]]; then
   codesign --force --options runtime --sign "$DEVELOPER_ID_APPLICATION" "$PKGROOT/usr/local/bin/pixelmug-codex"
 fi
 
+# Git checkouts may leave installer scripts without executable permissions.
+mkdir -p "$PACKAGE_SCRIPTS"
+install -m 0755 packaging/scripts/preinstall packaging/scripts/postinstall "$PACKAGE_SCRIPTS"
+
 pkgbuild \
   --root "$PKGROOT" \
   --identifier "$PKG_ID" \
   --version "$VERSION" \
   --component-plist "$COMPONENT_PLIST" \
-  --scripts "$ROOT_DIR/packaging/scripts" \
+  --scripts "$PACKAGE_SCRIPTS" \
   --install-location / \
   "$COMPONENT_PKG"
 

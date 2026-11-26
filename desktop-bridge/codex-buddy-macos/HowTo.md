@@ -33,6 +33,20 @@ The package installs:
 
 After installation, the post-install step registers the user-level Codex hook and LaunchAgent, then opens the menu-bar app.
 
+If Installer reports a generic failure, open Terminal and inspect the system installation log:
+
+```bash
+sudo tail -n 120 /var/log/install.log
+```
+
+To retry with detailed progress and logs, use the full path to the downloaded package:
+
+```bash
+sudo installer -pkg "/path/to/PixelMugCodex-<version>-arm64.pkg" -target / -verboseR -dumplog
+```
+
+Use the `x64` package on an Intel Mac. Look for `com.pixelmug.codex`, `preinstall`, `postinstall`, or `PKInstallErrorDomain` in the output.
+
 ## First-time pairing
 
 1. Make sure PixelMug is not connected to another desktop buddy.
