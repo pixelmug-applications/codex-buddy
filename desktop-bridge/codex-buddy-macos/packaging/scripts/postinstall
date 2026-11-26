@@ -1,8 +1,10 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
+
+printf '%s\n' 'PixelMug Codex postinstall: checking the active desktop user.'
 
 CONSOLE_USER="$(stat -f '%Su' /dev/console || true)"
-if [[ -z "$CONSOLE_USER" || "$CONSOLE_USER" == "root" || "$CONSOLE_USER" == "loginwindow" ]]; then
+if [ -z "$CONSOLE_USER" ] || [ "$CONSOLE_USER" = root ] || [ "$CONSOLE_USER" = loginwindow ]; then
   exit 0
 fi
 

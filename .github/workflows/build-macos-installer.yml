@@ -58,6 +58,8 @@ jobs:
           fi
           package="${packages[0]}"
           pkgutil --payload-files "$package"
+          sudo /usr/sbin/installer -pkg "$package" -target / -verboseR -dumplog
+          pkgutil --pkg-info com.pixelmug.codex
           mv "$package" "${package%.pkg}-$PACKAGE_ARCH.pkg"
 
       - name: Upload macOS installer
